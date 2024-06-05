@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 
 @Service
 public class UploadStudentFromExcelImpl implements UploadStudentFromExcel {
@@ -34,10 +33,8 @@ public class UploadStudentFromExcelImpl implements UploadStudentFromExcel {
              Workbook workbook = new XSSFWorkbook(inputStream)) {
 
             Sheet sheet = workbook.getSheetAt(0);
-            Iterator<Row> rows = sheet.iterator();
 
-            while (rows.hasNext()) {
-                Row currentRow = rows.next();
+            for (Row currentRow : sheet) {
                 if (currentRow.getRowNum() == 0) { // skip header row
                     continue;
                 }

@@ -3,38 +3,37 @@ package com.example.projecttest.Controller;
 import com.example.projecttest.Entity.ClassRoom;
 import com.example.projecttest.service.ClassRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@RequestMapping("/classrooms")
+@RequestMapping("/api/classrooms")
 public class ClassroomController {
     @Autowired
     private ClassRoomService classroomService;
 
-    @PostMapping("/create")
-    public ClassRoom createClassroom(@RequestBody ClassRoom classroom) {
-        return classroomService.createClassroom(classroom);
+    @PostMapping("/create/{teacherId}")
+    public ClassRoom createClassroom(@RequestBody ClassRoom classroom, @PathVariable Long teacherId) {
+        return classroomService.createClassroom(classroom, teacherId);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ClassRoom> getClassRoomById(@PathVariable Long id) {
-        Optional<ClassRoom> classRoom = classroomService.getClassRoomById(id);
-        if (classRoom.isPresent()) {
-            return ResponseEntity.ok(classRoom.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/{teacherId}")
+    public List<ClassRoom> getClassroomsByTeacherId(@PathVariable Long teacherId) {
+        return classroomService.getClassroomsByTeacherId(teacherId);
     }
 
-    @GetMapping("/all")
-    public List<ClassRoom> getAllClassrooms() {
-        return classroomService.getAllClassrooms();
-    }
+//    @GetMapping("/all")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public List<ClassRoom> getAllClassrooms() {
+//        return classroomService.getAllClassrooms();
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ClassRoom> updateClassRoom(@PathVariable Long id, @RequestBody ClassRoom classRoomDetails) {
@@ -47,7 +46,7 @@ public class ClassroomController {
     }
 
     @DeleteMapping("/remove/{id}")
-    public ResponseEntity<Void> deleteClassRoom(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteClassroomAndStudents(@PathVariable Long id) {
         classroomService.deleteClassRoom(id);
         return ResponseEntity.noContent().build();
     }

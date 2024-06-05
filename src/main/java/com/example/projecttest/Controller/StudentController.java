@@ -6,32 +6,34 @@ import com.example.projecttest.request.StudentRequest;
 import com.example.projecttest.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/api/students")
 public class StudentController {
     @Autowired
     private StudentService studentService;
 
     @PostMapping("/create/{classroomId}")
+//    @PreAuthorize("hasRole('USER')")
     public Student createStudent(@RequestBody Student student, @PathVariable Long classroomId) {
         return studentService.createStudent(student, classroomId);
     }
-    @GetMapping("/all")
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
-    }
+//    @GetMapping("/all")
+//    public List<Student> getAllStudents() {
+//        return studentService.getAllStudents();
+//    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-        Optional<Student> student = studentService.getStudentById(id);
-        return student.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+//        Optional<Student> student = studentService.getStudentById(id);
+//        return student.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student studentDetails) {
@@ -55,7 +57,7 @@ public class StudentController {
     }
 
     @GetMapping("information/classroom/{classroomId}")
-    public List<StudentInforRequest> getStudentsInforByClassroom(@PathVariable Long classroomId) {
+    public List<StudentInforRequest> getStudentsInfoByClassroom(@PathVariable Long classroomId) {
         return studentService.getStudentInforByClassroom(classroomId);
     }
 }

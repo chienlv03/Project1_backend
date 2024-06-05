@@ -11,9 +11,9 @@ import java.util.Optional;
 public interface StudentService {
     Student createStudent(Student student, Long classroomId);
 
-    List<Student> getAllStudents();
+//    List<Student> getAllStudents();
 
-    Optional<Student> getStudentById(Long id);
+//    Optional<Student> getStudentById(Long id);
 
     Student updateStudent(Long id, Student studentDetails);
 

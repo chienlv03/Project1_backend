@@ -26,32 +26,32 @@ public class StudentClassroomServiceImpl implements StudentClassroomService {
     private ClassRoomRepository classroomRepository;
 
     // Thêm stuednt vào lớp
-    public StudentClassroom enrollStudentInClassroom(Long studentId, Long classroomId) {
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found"));
-        ClassRoom classroom = classroomRepository.findById(classroomId).orElseThrow(() -> new RuntimeException("Classroom not found"));
-
-        StudentClassroom studentClassroom = new StudentClassroom();
-        studentClassroom.setStudent(student);
-        studentClassroom.setClassroom(classroom);
-
-        return studentClassroomRepository.save(studentClassroom);
-    }
+//    public StudentClassroom enrollStudentInClassroom(Long studentId, Long classroomId) {
+//        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found"));
+//        ClassRoom classroom = classroomRepository.findById(classroomId).orElseThrow(() -> new RuntimeException("Classroom not found"));
+//
+//        StudentClassroom studentClassroom = new StudentClassroom();
+//        studentClassroom.setStudent(student);
+//        studentClassroom.setClassroom(classroom);
+//
+//        return studentClassroomRepository.save(studentClassroom);
+//    }
 
     // Lấy tất cả học sinh trong 1 lớp
-    public List<Student> getStudentsInClassroom(Long classroomId) {
-        return studentClassroomRepository.findByClassroomId(classroomId)
-                .stream()
-                .map(StudentClassroom::getStudent)
-                .collect(Collectors.toList());
-    }
+//    public List<Student> getStudentsInClassroom(Long classroomId) {
+//        return studentClassroomRepository.findByClassroomId(classroomId)
+//                .stream()
+//                .map(StudentClassroom::getStudent)
+//                .collect(Collectors.toList());
+//    }
 
     // Lấy tất cả lớp của 1 học sinh
-    public List<ClassRoom> getClassroomsForStudent(Long studentId) {
-        return studentClassroomRepository.findByStudentId(studentId)
-                .stream()
-                .map(StudentClassroom::getClassroom)
-                .collect(Collectors.toList());
-    }
+//    public List<ClassRoom> getClassroomsForStudent(Long studentId) {
+//        return studentClassroomRepository.findByStudentId(studentId)
+//                .stream()
+//                .map(StudentClassroom::getClassroom)
+//                .collect(Collectors.toList());
+//    }
 
     // Lấy ra số ần vắng của mỗi học sinh trong 1 lớp
     @Override
@@ -66,10 +66,10 @@ public class StudentClassroomServiceImpl implements StudentClassroomService {
     }
 
     // Xóa học sinh khỏi lớp
-    @Override
-    public void removeStudentFromClassroom(Long studentId, Long classroomId) {
-        StudentClassroom studentClassroom = studentClassroomRepository.findByStudentIdAndClassroomId(studentId, classroomId)
-                .orElseThrow(() -> new RuntimeException("Enrollment record not found"));
-        studentClassroomRepository.delete(studentClassroom);
-    }
+//    @Override
+//    public void removeStudentFromClassroom(Long studentId, Long classroomId) {
+//        StudentClassroom studentClassroom = studentClassroomRepository.findByStudentIdAndClassroomId(studentId, classroomId)
+//                .orElseThrow(() -> new RuntimeException("Enrollment record not found"));
+//        studentClassroomRepository.delete(studentClassroom);
+//    }
 }

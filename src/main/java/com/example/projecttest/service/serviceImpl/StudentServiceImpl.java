@@ -1,8 +1,10 @@
 package com.example.projecttest.service.serviceImpl;
 
+import com.example.projecttest.Entity.Attendance;
 import com.example.projecttest.Entity.ClassRoom;
 import com.example.projecttest.Entity.Student;
 import com.example.projecttest.Entity.StudentClassroom;
+import com.example.projecttest.Repository.AttendanceRepository;
 import com.example.projecttest.Repository.ClassRoomRepository;
 import com.example.projecttest.Repository.StudentClassroomRepository;
 import com.example.projecttest.Repository.StudentRepository;
@@ -28,6 +30,9 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentClassroomRepository studentClassroomRepository;
 
+    @Autowired
+    private AttendanceRepository attendanceRepository;
+
     @Override
     public Student createStudent(Student student, Long classroomId) {
         // Lưu học sinh vào database
@@ -47,13 +52,13 @@ public class StudentServiceImpl implements StudentService {
 
         return savedStudent;
     }
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
-    }
+//    public List<Student> getAllStudents() {
+//        return studentRepository.findAll();
+//    }
 
-    public Optional<Student> getStudentById(Long id) {
-        return studentRepository.findById(id);
-    }
+//    public Optional<Student> getStudentById(Long id) {
+//        return studentRepository.findById(id);
+//    }
 
 
     public Student updateStudent(Long id, Student studentDetails) {
@@ -127,6 +132,10 @@ public class StudentServiceImpl implements StudentService {
         StudentClassroom studentClassroom = studentClassroomRepository.findByStudentIdAndClassroomId(studentId, classroomId)
                 .orElseThrow(() -> new RuntimeException("StudentClassroom not found for studentId: " + studentId + " and classroomId: " + classroomId));
 
+        // Xóa bản ghi Attendance
+        List<Attendance> attendances = attendanceRepository.findByStudentClassroom_Student_Id(studentId);
+
+        attendanceRepository.deleteAll(attendances);
         // Xóa bản ghi StudentClassroom
         studentClassroomRepository.delete(studentClassroom);
 
