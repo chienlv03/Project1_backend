@@ -9,8 +9,6 @@ import com.example.projecttest.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +22,11 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public List<Attendance> createAttendanceRecords(Long classroomId, String attendanceTime) {
         List<StudentClassroom> studentClassrooms = studentClassroomRepository.findByClassroomId(classroomId);
+
+        if (studentClassrooms.isEmpty()) {
+            throw new RuntimeException("Lớp không có sinh viên");
+        }
+
         List<Attendance> attendances = new ArrayList<>();
 
         for (StudentClassroom studentClassroom : studentClassrooms) {

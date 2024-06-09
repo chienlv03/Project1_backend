@@ -33,8 +33,9 @@ public class ClassRoomServiceImpl implements ClassRoomService {
 
     @Override
     public ClassRoom createClassroom(ClassRoom classroom, Long teacherId) {
+
         User user = userRepository.findById(teacherId)
-                .orElseThrow(() -> new RuntimeException("Classroom not found with id: " + teacherId));
+                .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + teacherId));
         classroom.setTeacher(user);
         return classroomRepository.save(classroom);
     }

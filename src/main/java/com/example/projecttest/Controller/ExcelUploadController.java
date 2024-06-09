@@ -3,6 +3,7 @@ package com.example.projecttest.Controller;
 import com.example.projecttest.service.serviceImpl.UploadStudentFromExcelImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ public class ExcelUploadController {
     private UploadStudentFromExcelImpl excelService;
 
     @PostMapping("/upload/classroom/{classroomId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long classroomId) {
         try {
             excelService.saveStudentsFromExcel(file, classroomId);

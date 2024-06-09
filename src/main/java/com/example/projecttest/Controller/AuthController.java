@@ -55,6 +55,19 @@ public class AuthController {
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
+    if (!userRepository.existsByEmail(loginRequest.getEmail())) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Tài khoản không tồn tại"));
+    }
+
+    // Lấy thông tin người dùng từ cơ sở dữ liệu
+    User user = userRepository.findByEmail(loginRequest.getEmail())
+            .orElseThrow(() -> new RuntimeException("Tài khoản không tồn tại."));
+
+    // Kiểm tra mật khẩu
+    if (!encoder.matches(loginRequest.getPassword(), user.getPassword())) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Mật khẩu không đúng"));
+    }
+
     Authentication authentication = authenticationManager
             .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -77,10 +90,6 @@ public class AuthController {
 
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
-    }
-
     if (userRepository.existsByEmail(signUpRequest.getEmail())) {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
     }

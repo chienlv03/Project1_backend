@@ -1,6 +1,9 @@
 package com.example.projecttest.Controller;
 
 import com.example.projecttest.Entity.Attendance;
+import com.example.projecttest.Entity.StudentClassroom;
+import com.example.projecttest.Repository.StudentClassroomRepository;
+import com.example.projecttest.payload.response.MessageResponse;
 import com.example.projecttest.request.CreateAttendanceRequest;
 import com.example.projecttest.request.UpdateAttendanceRequest;
 import com.example.projecttest.service.AttendanceService;
@@ -18,8 +21,17 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+    @Autowired
+    private StudentClassroomRepository studentClassroomRepository;
+
     @PostMapping("/classroom/{classroomId}")
-    public ResponseEntity<List<Attendance>> createAttendanceRecords(@PathVariable Long classroomId, @RequestBody CreateAttendanceRequest request) {
+    public ResponseEntity<?> createAttendanceRecords(@PathVariable Long classroomId, @RequestBody CreateAttendanceRequest request) {
+        List<StudentClassroom> studentClassrooms = studentClassroomRepository.findByClassroomId(classroomId);
+
+        if (studentClassrooms.isEmpty()) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Lớp không có sinh viên"));
+        }
+
         List<Attendance> attendances = attendanceService.createAttendanceRecords(classroomId, request.getAttendanceTime());
         return ResponseEntity.ok(attendances);
     }

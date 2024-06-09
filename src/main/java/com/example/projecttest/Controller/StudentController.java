@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -20,20 +19,9 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping("/create/{classroomId}")
-//    @PreAuthorize("hasRole('USER')")
     public Student createStudent(@RequestBody Student student, @PathVariable Long classroomId) {
         return studentService.createStudent(student, classroomId);
     }
-//    @GetMapping("/all")
-//    public List<Student> getAllStudents() {
-//        return studentService.getAllStudents();
-//    }
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-//        Optional<Student> student = studentService.getStudentById(id);
-//        return student.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student studentDetails) {

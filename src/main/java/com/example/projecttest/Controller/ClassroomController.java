@@ -1,16 +1,15 @@
 package com.example.projecttest.Controller;
 
 import com.example.projecttest.Entity.ClassRoom;
+import com.example.projecttest.Repository.ClassRoomRepository;
+import com.example.projecttest.payload.response.MessageResponse;
 import com.example.projecttest.service.ClassRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -19,21 +18,26 @@ public class ClassroomController {
     @Autowired
     private ClassRoomService classroomService;
 
+    @Autowired
+    private ClassRoomRepository classroomRepository;
+
     @PostMapping("/create/{teacherId}")
-    public ClassRoom createClassroom(@RequestBody ClassRoom classroom, @PathVariable Long teacherId) {
-        return classroomService.createClassroom(classroom, teacherId);
+    public ResponseEntity<?> createClassroom(@RequestBody ClassRoom classroom, @PathVariable Long teacherId) {
+        if (classroomRepository.existsByClassCode(classroom.getClassCode())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Mã lớp đã tồn tại"));
+        }
+        try {
+            ClassRoom createdClassRoom = classroomService.createClassroom(classroom, teacherId);
+            return ResponseEntity.ok(createdClassRoom);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new MessageResponse("An error occurred while creating the classroom"));
+        }
     }
 
-    @GetMapping("/{teacherId}")
+    @GetMapping("/get/{teacherId}")
     public List<ClassRoom> getClassroomsByTeacherId(@PathVariable Long teacherId) {
         return classroomService.getClassroomsByTeacherId(teacherId);
     }
-
-//    @GetMapping("/all")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public List<ClassRoom> getAllClassrooms() {
-//        return classroomService.getAllClassrooms();
-//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ClassRoom> updateClassRoom(@PathVariable Long id, @RequestBody ClassRoom classRoomDetails) {

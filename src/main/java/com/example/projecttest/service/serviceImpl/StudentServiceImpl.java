@@ -52,13 +52,6 @@ public class StudentServiceImpl implements StudentService {
 
         return savedStudent;
     }
-//    public List<Student> getAllStudents() {
-//        return studentRepository.findAll();
-//    }
-
-//    public Optional<Student> getStudentById(Long id) {
-//        return studentRepository.findById(id);
-//    }
 
 
     public Student updateStudent(Long id, Student studentDetails) {

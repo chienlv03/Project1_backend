@@ -71,7 +71,6 @@ public class WebSecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Cấu hình quản lý phiên
             .authorizeHttpRequests(auth ->
                     auth.requestMatchers("/api/**").permitAll()
-//                            .requestMatchers("/api/classrooms/**").permitAll()
                             .anyRequest().authenticated() // Yêu cầu xác thực cho tất cả các yêu cầu khác
             );
 
